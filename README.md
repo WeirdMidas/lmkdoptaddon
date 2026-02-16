@@ -14,6 +14,7 @@ If you want an optimization that improves the kernel's memory management behavio
   - Whether the device has 6GB or less RAM.
   - Based on this, we can adapt our thrashing parameters based on how efficient the swapping management is, making LMKD less likely to interfere with system apps as the swapping management is able to handle the situation.
 - Pin a memory recycling thread "oom_reaper" on the big/prime cores to allow the cleanup of dead processes to occur immediately and without waiting, drastically reducing system contention time.
+- Configure ZRAM thresholds based on the algorithm used. This means that devices using lz4, in addition to a 3.1x compression rate (the current Android standard), can also keep more data in memory because lz4 is so fast that we experience little impact when ZRAM is near full (where LMKD starts monitoring at 95-90% ZRAM usage). Other algorithms also have this configuration, even custom ones like lz4hc and lz4kd, allowing LMKD to adapt perfectly to the device's ZRAM configuration.
 
 #### Old LMK-Side (Old Solution)
 - Make the minfree margin smoother and more predictable, avoid generating free memory abruptly, allowing older devices to use as much memory as possible before needing to clear everything, favoring the longevity of multitasking.
