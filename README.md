@@ -7,15 +7,17 @@ If you want an optimization that improves the kernel's memory management behavio
 
 #### LMKD-Side (Modern Solution)
 - Use PSI as the main killing method for LMKD. Abandon solutions like Minfree and focus on dynamic solutions that can respect the multitasking needs of modern devices with fewer false positives. With this, our LMKD has as few false positives as possible, reducing the need for LMKD intervention and allowing kswapd/ZRAM to handle memory management for longer (as the SkyScene Add-on proposes in its readme).
+  - Do not tamper with minfree or, if the device uses it, with new strategy or dynamic pressure, allowing older devices to retain their settings while receiving improvements in other parts of LMKD, which improves compatibility with what the ROM/Manufacturer delivers on their devices.
 - By opting for the full use of the PSI mechanism, adapt the parameters of light and full stalls, thrashing, and other parameters based on the processor's capacity. This means that processors with small core clocks (which will be the measure used) below 1.7GHz, even if they are "high performance," can tolerate the same amount of crashes as a 1.9GHz "low memory" processor. This means that PSI adapts according to the processor's capacity to handle the number of processes requesting memory, always avoiding noticeable and irritating crashes, which is our goal: to tolerate multitasking before the user gets annoyed.
 - Change the LMKD thrashing parameters based on two variables:
   - Whether the device has MGLRU.
   - Whether the device has 6GB or less RAM.
-- Based on this, we can adapt our thrashing parameters based on how efficient the swapping management is, making LMKD less likely to interfere with system apps as the swapping management is able to handle the situation.
-- It's preferable to kill the most resource-intensive processes as needed to shorten their lifespan and free up memory faster, as is the case with low-memory devices. On high-performance devices, it's better to kill processes gradually, since with ample memory, killing the most memory-intensive process becomes less necessary (and even detrimental).
+  - Based on this, we can adapt our thrashing parameters based on how efficient the swapping management is, making LMKD less likely to interfere with system apps as the swapping management is able to handle the situation.
+- Pin a memory recycling thread "oom_reaper" on the big/prime cores to allow the cleanup of dead processes to occur immediately and without waiting, drastically reducing system contention time.
 
 #### Old LMK-Side (Old Solution)
 - Make the minfree margin smoother and more predictable, avoid generating free memory abruptly, allowing older devices to use as much memory as possible before needing to clear everything, favoring the longevity of multitasking.
+- Prefer the old lmk oom_reaper over the traditional kernel oom_reaper, allowing the old lmk to have an oom_reaper that respects it and is more agile.
 - Avoid using the adaptive Old LMK; it is unpredictable and can generate more false positives than it necessarily allows for better memory management.
   - Disable batch kill methods and other OEM functionalities, reducing the need for LMK to act in a stupid and naive way.
   
