@@ -1,4 +1,4 @@
-# LMKD PSI Activation
+# ClearSky Add-on
 
 ## An efficient system, stable — even under pressure or when it needs to act
 
