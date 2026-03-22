@@ -1,4 +1,4 @@
-# ClearSky Add-on
+# LMKD PSI Activator
 
 ## An efficient system, stable — even under pressure or when it needs to act
 
@@ -6,10 +6,13 @@ An extension of the SkyScene Add-on, where it achieves the effect of preventing 
 
 If you want an optimization that improves the kernel's memory management behavior, check out the [SkyScene Add-on](https://github.com/WeirdMidas/SkySceneAddon), it specifically handles this aspect, such as swapping, reclaim, and others
 
+It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid/LMKD-PSI-Activator) that optimizes the LMKD PSI part more efficiently and better for Android multitasking. However, it became an original project due to the stark difference in optimization between the two modules.
+
 ### Features
 - Pure background memory management optimization module (lmk, psi), without other side effects or placebos, and compatible with all major platforms, from Qualcomm to Mediatek, Unisoc, and others. It only requires using lmkd as the primary LMK module in the ROM
 - Utilize lmkd's modern pressure mechanism, PSI (pressure stall information), allowing lmkd to kill background processes based on whether the system can handle keeping them running in memory. It doesn't depend on fixed minfree thresholds or anything like that
   - Follow Google's guidelines and standards, allowing older devices to benefit from a modern LMKD PSI in an older environment, depending on the available parameters
+  - Compatible with custom ZRAM algorithms (such as lz4kd and zstdn) so that LMKD has more accuracy regarding ZRAM space
 - Make the LMKD PSI as accurate as possible, based on various checks and variables. By doing this, we make our LMKD PSI more accurate because we already recognize the limitations and efficiency of our hardware
 - Avoid stalls as much as possible, in addition to maintaining efficient and stable multitasking, reducing lmkd interventions and energy costs for each killing action by being as precise as possible, the PSI can be a professional killer based on how much each device tolerates stalls
 - First and foremost: RESPECT THE HARDWARE! Don't push multitasking or process management beyond what the user's hardware can handle. If it can handle X number of processes, don't push the limits beyond that; the user NEEDS to know that not everything can be the way they want it
