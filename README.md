@@ -1,44 +1,41 @@
-# LMKD PSI Activator
+# lmkd psi mod(ified)
 
-## An efficient system, stable — even under pressure or when it needs to act
+**A module that optimizes how Android manages background apps (lmkd)**
 
-An extension of the SkyScene Add-on, where it achieves the effect of preventing background apps from dying by modifying memory management mechanisms (lmk, psi). And by improving background process management, it's possible to achieve a smoother and more energy-efficient system
+## Overview
+
+An extension of the SkyScene Add-on, where it achieves the effect of improve how the system manages background apps by modifying memory management mechanisms (lmkd, psi). And by improving background process management, it's possible to achieve a smoother and more energy-efficient system
 
 If you want an optimization that improves the kernel's memory management behavior, check out the [SkyScene Add-on](https://github.com/WeirdMidas/SkySceneAddon), it specifically handles this aspect, such as swapping, reclaim, and others
 
 It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid/LMKD-PSI-Activator) that optimizes the LMKD PSI part more efficiently and better for Android multitasking. However, it became an original project due to the stark difference in optimization between the two modules.
 
 ### Features
-- Pure background memory management optimization module (lmk, psi), without other side effects or placebos, and compatible with all major platforms, from Qualcomm to Mediatek, Unisoc, and others. It only requires using lmkd as the primary LMK module in the ROM
+
+- Pure background memory management optimization module (lmkd, psi), without other side effects or placebos, and compatible with all major platforms, from Qualcomm to Mediatek, Unisoc, and others. It only requires using lmkd as the primary LMK module in the ROM
   - Utilize lmkd's modern pressure mechanism, PSI (pressure stall information), allowing lmkd to kill background processes based on whether the system can handle keeping them running in memory. It doesn't depend on fixed minfree thresholds or anything like that
-  - Follow Google's guidelines and standards, allowing older devices to benefit from a modern LMKD PSI in an older environment, depending on the available parameters
-- Make the LMKD PSI as accurate as possible, based on various checks and variables. By doing this, we make our LMKD PSI more accurate because we already recognize the limitations and efficiency of our hardware
+  - Optimize both the lmkd before and after Android 15. This allows the lmkd to be adapted generationally, avoiding the addition of features not present on older devices, making maintenance easier for various devices and adapted strategies according to resource availability
+- Respect the limits of each hardware component; don't push the device to its limits to avoid major I/O, memory, and CPU stalls. Maintain predictability and avoid bigger problems
+- Follow Google's guidelines and standards, allowing older devices to benefit from a modern LMKD PSI in an older environment, depending on the available parameters
 - Avoid stalls as much as possible, in addition to maintaining efficient and stable multitasking, reducing lmkd interventions and energy costs for each killing action by being as precise as possible, the PSI can be a professional killer based on how much each device tolerates stalls
-- First and foremost: RESPECT THE HARDWARE! Don't push multitasking or process management beyond what the user's hardware can handle. If it can handle X number of processes, don't push the limits beyond that; the user NEEDS to know that not everything can be the way they want it
-- During thermal throttling situations, lmkd might be too aggressive, due to prioritizing avoiding stalls and retention of useful processes, which can lead to excessive aggressiveness on the part of lmkd
+- Based on certain conditions, apply some optimizations to the sysfs parameters to slightly reduce I/O, MEM, or CPU stalls based on those conditions if they are met, allowing the system to perform well depending on the scenario
 - SELinux can still be enabled
 
 ## Requirement
 
-- Compatible with ARM64 and standard ARM
-- Magisk, KSU or Apatch, the most up-to-date version possible if you can
-- Android 10 or higher. Not compatible with versions below 10
-- It needs compatibility with PSI; kernels without PSI will not be able to use the module even if they have lmkd
-- You need at least 3GB of RAM to use it. Modern Android requires this as a minimum amount of RAM. However, it is still compatible with devices that have less RAM
-- It is recommended to use an additional busybox module for situations where the module cannot use the busybox from Magisk or the ROM
-- Depending on the ROM or kernel you are using on your device, you may experience compatibility issues if they are heavily modified
+- Android 10 or higher
+- Have PSI enabled in the kernel
+- Have lmkd as the only lmk mechanism on the device
+- 3GB or more of RAM (Optional)
 
 ## Installation
 
 - Install this module, restart your phone, wait 20 seconds before the final optimizations are applied, and voila, you can have fun with your device
 - For LMKD, these algorithms have these compression rates to allow it to better see the amount of memory saved by ZRAM:
-  - lz4, lzo, lzo-rlt, lz4kd, lz4k: 3x compression
-  - Lz4hc: 4x compression
-  - Zstd, Zstdn: 5x compression
-  - Other algorithms: 2x compression
-- Simple LMK is currently not supported
-- Per-Process LMK is currently not supported
-- Old LMK is currently not supported
+  - lz4, lzo, lzo-rlt, lz4kd, lz4k: 3x compression ratio
+  - Lz4hc: 4x compression ratio
+  - Zstd, Zstdn: 5x compression ratio
+  - Other algorithms: 2x compression ratio
 - Other customizable LMKs are not compatible, only lmkd is compatible
 - Devices with 2GB of RAM or less are GO devices, 3GB-4GB of RAM are low-end, 6GB-8GB is mid-tier, and 12GB or more is high-performance
 
