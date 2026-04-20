@@ -8,7 +8,7 @@ An extension of the SkyScene Add-on, where it achieves the effect of improve how
 
 If you want an optimization that improves the kernel's memory management behavior, check out the [SkyScene Add-on](https://github.com/WeirdMidas/SkySceneAddon), it specifically handles this aspect, such as swapping, reclaim, and others
 
-It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid/LMKD-PSI-Activator) that optimizes the LMKD PSI part more efficiently and better for Android multitasking. However, it became an original project due to the stark difference in optimization between the two modules.
+It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid/LMKD-PSI-Activator) that optimizes the LMKD PSI part more efficiently and better for Android multitasking. However, it became an original project due to the stark difference in optimization between the two modules
 
 ### Features
 
@@ -18,7 +18,7 @@ It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid
 - Respect the limits of each hardware component; don't push the device to its limits to avoid major I/O, memory, and CPU stalls. Maintain predictability and avoid bigger problems
 - Follow Google's guidelines and standards, allowing older devices to benefit from a modern LMKD PSI in an older environment, depending on the available parameters
 - Avoid stalls as much as possible, in addition to maintaining efficient and stable multitasking, reducing lmkd interventions and energy costs for each killing action by being as precise as possible, the PSI can be a professional killer based on how much each device tolerates stalls
-- Based on certain conditions, apply some optimizations to the sysfs parameters to slightly reduce I/O, MEM, or CPU stalls based on those conditions if they are met, allowing the system to perform well depending on the scenario
+- Pin the oom_reaper on the big/prime cores so that it has privileged access to high-performance cores, reducing the time the system experiences stalls due to lack of memory
 - SELinux can still be enabled
 
 ## Requirement
@@ -26,6 +26,7 @@ It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid
 - Android 10 or higher
 - Have PSI enabled in the kernel
 - Have lmkd as the only lmk mechanism on the device
+- Having ZRAM enabled in the kernel
 - 3GB or more of RAM (Optional)
 
 ## Installation
@@ -37,6 +38,7 @@ It was intended to be a fork of [LMKD-PSI-Activator](https://github.com/lululoid
   - Zstd, Zstdn: 5x compression ratio
   - Other algorithms: 2x compression ratio
 - Other customizable LMKs are not compatible, only lmkd is compatible
+- On Android devices running version 14 or lower, the "psi + minfree + new strategy" model is used, while on Android devices running version 15 or higher, the "pure psi" model is used
 - Devices with 2GB of RAM or less are GO devices, 3GB-4GB of RAM are low-end, 6GB-8GB is mid-tier, and 12GB or more is high-performance
 
 ## FAQ
